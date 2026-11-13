@@ -180,6 +180,26 @@
   .ovBtns button { font-size:32px; padding:14px 44px; }
   .ovOnigiri { animation:bounce .7s infinite alternate ease-in-out; }
   @keyframes bounce { from{transform:translateY(0) scale(1);} to{transform:translateY(-24px) scale(1.05);} }
+
+  /* ===== 縦長（スマホ等のポートレート） ===== */
+  #stage.portrait .headrow { flex-wrap:wrap; }
+  #stage.portrait .tabs { width:100%; margin-left:0; justify-content:center; margin-top:2px; }
+  #stage.portrait #coverTitle span { font-size:60px; }
+  #stage.portrait .coverBtns { flex-direction:column; gap:14px; align-items:center; }
+  #stage.portrait #coverInfo { flex-wrap:wrap; justify-content:center; }
+  #stage.portrait #levelGrid { width:664px; grid-template-columns:repeat(2, 1fr); }
+  #stage.portrait #introGrid { width:664px; }
+  #stage.portrait #gameMain { flex-direction:column; align-items:center; padding:0 18px; }
+  #stage.portrait #gameLeft { width:auto; padding-top:0; }
+  #stage.portrait .gameSpacer { display:none; }
+  #stage.portrait .slot { width:84px; height:92px; font-size:52px; }
+  #stage.portrait .tile { width:84px; height:92px; font-size:52px; }
+  #stage.portrait #picImg { width:400px; height:262px; }
+  #stage.portrait #chartWrap { flex-direction:column; width:664px; align-items:center; gap:10px; flex:1; min-height:0; overflow-y:auto; }
+  #stage.portrait .kcell { width:36px; height:36px; font-size:19px; }
+  #stage.portrait .kcell.ycell { width:46px; font-size:16px; }
+  #stage.portrait .confetti { animation-name:fallP; }
+  @keyframes fallP { to { transform:translateY(1330px) rotate(680deg); } }
 </style>
 </head>
 <body>
@@ -320,7 +340,7 @@
         <div id="slots"></div>
         <div id="tiles"></div>
       </div>
-      <div style="width:210px"></div>
+      <div class="gameSpacer" style="width:210px"></div>
     </div>
   </div>
 
@@ -526,8 +546,13 @@ let curLevel = LEVELS[0];
 
 /* ===== 画面フィット ===== */
 function fit() {
-  const s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
-  document.getElementById("stage").style.transform = "translate(-50%,-50%) scale(" + s + ")";
+  const stage = document.getElementById("stage");
+  const portrait = window.innerHeight > window.innerWidth;
+  const W = portrait ? 720 : 1280, H = portrait ? 1280 : 720;
+  stage.classList.toggle("portrait", portrait);
+  stage.style.width = W + "px"; stage.style.height = H + "px";
+  const s = Math.min(window.innerWidth / W, window.innerHeight / H);
+  stage.style.transform = "translate(-50%,-50%) scale(" + s + ")";
 }
 window.addEventListener("resize", fit); fit();
 

@@ -58,6 +58,14 @@ function ok(cond, label) { if (cond) pass++; else { fail++; if (fail < 20) conso
   ok(SEION_ROWS_K[0].join("") === "アイウエオ", "SEION_ROWS_K");
   ok(WORDS.ame === "あめ" && MODE === "hira", "default mode hira");
 
+  /* ===== 画面フィット（縦長対応） ===== */
+  ok(!document.getElementById("stage").classList.contains("portrait"), "fit: landscape default");
+  window.innerWidth = 390; window.innerHeight = 844; fit();
+  ok(document.getElementById("stage").classList.contains("portrait"), "fit: portrait class on");
+  ok(document.getElementById("stage").style.width === "720px" && document.getElementById("stage").style.height === "1280px", "fit: portrait stage 720x1280");
+  window.innerWidth = 1280; window.innerHeight = 720; fit();
+  ok(!document.getElementById("stage").classList.contains("portrait"), "fit: back to landscape");
+
   for (const [modeName, W, Ls] of [["hira", WORDS_H, LEVELS_H], ["kata", WORDS_K, LEVELS_K]]) {
     MODE = modeName; bindDS(); progress = PROG[modeName];
     for (const L of Ls) for (const id of L.words) {
